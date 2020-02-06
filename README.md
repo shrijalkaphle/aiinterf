@@ -1,1 +1,0 @@
-# shrijalkaphle.github.io
