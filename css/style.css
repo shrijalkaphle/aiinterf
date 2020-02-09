@@ -42,3 +42,11 @@ body {
     background-color: #4ca1af;
     background-image: linear-gradient(135deg, #4ca1af 0%, #c4e0e5 100%);
 }
+
+.main {
+    padding-top: 100px;
+}
+
+.form-div {
+    padding: 20px;
+}

@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="icon" type="image/ico" href="../../assets/images/siteLogo.jpg" />
-    <title>AI-INTERF | Summary</title>
+    <title>AI-INTERF | Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
@@ -61,7 +61,7 @@
                                             </div>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
+                                            <a href="../../logout"><button type="button" tabindex="0" class="dropdown-item">Logout</button></a>
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@
                             </li>
                             <div class="spacer"></div>
                             <li>
-                                <a href="../summary/" class="mm-active">
+                                <a href="../summary/">
                                     <i class="metismenu-icon fas fa-list-alt"></i>
                                     Summary
                                 </a>
@@ -130,7 +130,7 @@
                             </li>
                             <div class="spacer"></div>
                             <li>
-                                <a href="../interface/">
+                                <a href="../interface/" class="mm-active">
                                     <i class="metismenu-icon fas fa-tv"></i>
                                     Interface
                                 </a>
@@ -152,13 +152,40 @@
                         <div class="page-title-wrapper">
                             <div class="page-title-heading">
                                 <div class="page-title-icon">
-                                    <i class="fas fa-list-alt"></i>
+                                    <i class="fas fa-tv"></i>
                                 </div>
-                                <div>Summary</div>
+                                <div>Interface</div>
                             </div>
                         </div>
                     </div>
-                    <div class="row"></div>
+                    <div class="contain">
+                        <form method="post" class="inline">
+                            <input type="file" name="" id="">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i></button>
+                        </form>
+                    </div>
+                    <div class="spacer"></div>
+                    <div class="card mycard">
+                        <div class="card-body">
+                            <table class="mb-0 table table-borderless">
+                                <thead>
+                                    <td>File Name</td>
+                                    <td>Extension</td>
+                                    <td></td>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>
+                                            <a href="#" download><button class="btn btn-success"><i class="fas fa-download"></i></button></a>
+                                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
             </div>
@@ -167,3 +194,15 @@
     </div>
 </body>
 </html>
+
+<style>
+    .contain {
+        /* border: 1px solid black; */
+        width: 400px;
+        margin: auto;
+    }
+    .mycard {
+        width: 80%;
+        margin: auto;
+    }
+</style>

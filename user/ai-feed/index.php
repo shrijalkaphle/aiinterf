@@ -61,7 +61,7 @@
                                             </div>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
+                                            <a href="../../logout"><button type="button" tabindex="0" class="dropdown-item">Logout</button></a>
                                         </div>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@
                             </li>
                             <div class="spacer"></div>
                             <li>
-                                <a href="../performance/" class="mm-active">
+                                <a href="../performance/">
                                     <i class="metismenu-icon fas fa-chart-bar"></i>
                                     Performance
                                 </a>
@@ -137,7 +137,7 @@
                             </li>
                             <div class="spacer"></div>
                             <li>
-                                <a href="../ai-feed/">
+                                <a href="../ai-feed/" class="mm-active">
                                     <i class="metismenu-icon fas fa-comments"></i>
                                     AI-Feed
                                 </a>
@@ -152,9 +152,9 @@
                         <div class="page-title-wrapper">
                             <div class="page-title-heading">
                                 <div class="page-title-icon">
-                                    <i class="fas fa-chart-bar"></i>
+                                    <i class="fas fa-comments"></i>
                                 </div>
-                                <div>Performance</div>
+                                <div>AI-Feed</div>
                             </div>
                         </div>
                     </div>

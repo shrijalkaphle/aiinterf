@@ -1,4 +1,4 @@
 RewriteEngine on
 
-RewriteRule ^([^/\.]+)/([^/\.]+)?$ $1/$2/index.html [L]
-RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)?$ $1/$2/index.html?id=$3 [L]
+RewriteRule ^([^/\.]+)/([^/\.]+)?$ $1/$2/index.php [L]
+RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)?$ $1/$2/index.php?id=$3 [L]
