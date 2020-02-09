@@ -2,7 +2,7 @@
     include '../../dbconnect.php';
 
     if(!$_SESSION['username']) {
-        header("location: /aiinterf/");
+        header("location: ". ROOT ."");
     }
 
     $query = "SELECT * FROM `filesUpload` ORDER BY id ASC";

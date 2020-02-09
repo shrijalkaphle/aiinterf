@@ -1,4 +1,7 @@
 <?php
+
+    define("ROOT", "/aiinterf/");
+    
     session_start();
     $host = 'localhost';
     $user = 'root';

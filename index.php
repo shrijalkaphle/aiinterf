@@ -16,6 +16,7 @@
 
         if($num != 0) {
             $data = mysqli_fetch_assoc($result);
+            $_SESSION['username'] = $data['name'];
             $_SESSION['name'] = $data['name'];
             $_SESSION['type'] = $data['type'];
 
@@ -47,7 +48,7 @@
 </head>
 <body>
     <header class="header">
-        <nav class="navbar navbar-expand-lg fixed-top py-3">
+        <nav class="navbar navbar-expand-lg fixed-top py-md-3">
             <div class="container">
                 <img src="assets/images/logo.png" alt="">
                 <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><i class="fa fa-bars"></i></button>
@@ -67,6 +68,15 @@
     
     <div class="main">
         <div class="container">
+        <?php
+                        if($err != '') {
+                    ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $err ?>
+                    </div>
+                    <?php
+                        }
+                    ?>
             <div class="card" style="width: 40%; margin: auto;">
                 <center><h2 class="card-header">LOGIN</h2></center>
                 <div class="form-div">

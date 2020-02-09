@@ -2,7 +2,7 @@
     include '../../dbconnect.php';
 
     if(!$_SESSION['username']) {
-        header("location: /aiinterf/");
+        header("location: ". ROOT ."");
     }
     
     $msg = '';
