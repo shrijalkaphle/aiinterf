@@ -1,3 +1,14 @@
+<?php
+    include '../../dbconnect.php';
+
+    if(!$_SESSION['username']) {
+        header("location: /aiinterf/");
+    }
+
+    $query = "SELECT * FROM `filesUpload` ORDER BY id ASC";
+	$result = mysqli_query($conn, $query);
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -56,12 +67,12 @@
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                             <div class="widget-heading">
-                                                Alina Mclourd
+                                                <?php echo $_SESSION['name'] ?>
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </div>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
+                                            <a href="../../logout"><button type="button" tabindex="0" class="dropdown-item">Logout</button></a>
                                         </div>
                                     </div>
                                 </div>
@@ -172,20 +183,32 @@
                                     <tr>
                                         <td>File Name</td>
                                         <td>File Extension</td>
-                                        <td>Username</td>
+                                        <td>User Name</td>
                                         <td></td>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php
+                                        while($data = mysqli_fetch_assoc($result)):
+                                            $filename = pathinfo($data['name'], PATHINFO_FILENAME);
+                                            $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+                                            $uid = $data['userid'];
+                                            $exec = mysqli_query($conn,"SELECT * FROM user WHERE id = '$uid'");
+                                            $usr = mysqli_fetch_assoc($exec);
+                                            $user = $usr['name'];
+                                    ?>
                                     <tr>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>1</td>
+                                        <td><?php echo $filename ?></td>
+                                        <td><?php echo $extension ?></td>
+                                        <td><?php echo $user ?></td>
                                         <td>
-                                            <a href="#" download><button class="btn btn-success"><i class="fas fa-download"></i></button></a>
+                                            <a href="<?php echo $location ?>" download><button class="btn btn-success"><i class="fas fa-download"></i></button></a>
                                             <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
+                                    <?php
+                                        endwhile;
+                                    ?>
                                 </tbody>
                             </table>
                         </div>

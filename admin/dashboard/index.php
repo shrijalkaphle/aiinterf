@@ -1,3 +1,10 @@
+<?php
+    include '../../dbconnect.php';
+    if(!$_SESSION['username']) {
+        header("location: /aiinterf/");
+    }
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -56,12 +63,12 @@
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                             <div class="widget-heading">
-                                                Alina Mclourd
+                                                <?php echo $_SESSION['name'] ?>
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </div>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
+                                            <a href="../../logout"><button type="button" tabindex="0" class="dropdown-item">Logout</button></a>
                                         </div>
                                     </div>
                                 </div>

@@ -1,3 +1,49 @@
+<?php
+    include '../../dbconnect.php';
+
+    if(!$_SESSION['username']) {
+        header("location: /aiinterf/");
+    }
+
+    $msg = '';
+
+    if($_GET['msg']) {
+        $msg = $_GET['msg'];
+    }
+
+    if(isset($_POST['post'])) {
+        $title = $_POST['title'];
+        $user = $_POST['user'];
+        $video = $_FILES['video']['name'];
+        $header = $_POST['header'];
+        $bdy = $_POST['body'];
+        $body = str_replace("'","&#39;",$bdy);
+        
+        $target_dir = "videos/";
+
+        if(empty($video)) {
+            $query = "INSERT INTO pages VALUES ('','$user','','$title','$header','$body','')";
+            mysqli_query($conn, $query) or die($query);
+            $msg = "User Post Created.";
+        } else {
+            $target_file = $target_dir . $_FILES['video']['name'];
+            $extensions_arr = array("mp4", "avi", "3gp", "mov", "mpeg");
+            $videoFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+            if (in_array($videoFileType, $extensions_arr)) {
+                if (move_uploaded_file($_FILES['video']['tmp_name'], $target_file)) {
+                    $query = "INSERT INTO pages VALUES ('','$user','$video','$title','$header','$body','$target_file')";
+                    mysqli_query($conn, $query);
+                    $msg = "User Post Created.";
+                }
+            }
+        }
+    }
+
+    $sql = "SELECT * FROM pages";
+    $result = mysqli_query($conn,$sql);
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -12,6 +58,7 @@
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
     
+    <script src="../../js/jquery-3.4.1.min.js"></script>
     <link href="../../css/main.css" rel="stylesheet">
 </head>
 <body>
@@ -56,12 +103,12 @@
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                             <div class="widget-heading">
-                                                Alina Mclourd
+                                                <?php echo $_SESSION['name'] ?>
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </div>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
+                                        <a href="../../logout"><button type="button" tabindex="0" class="dropdown-item">Logout</button></a>
                                         </div>
                                     </div>
                                 </div>
@@ -165,40 +212,58 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <?php
+                        if($msg != '') {
+                    ?>
+                    <div class="alert alert-success" role="alert">
+                        <?php echo $msg ?>
+                    </div>
+                    <?php
+                        }
+                    ?>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <h5 class="card-header">List of Pages</h5>
                             <div class="list-group">
-                                <div class="card">
+                                <?php
+                                    while ($row = mysqli_fetch_assoc($result)):
+                                ?>
+                                <input type="hidden" name="cid" value="<?php echo $row['id']; ?>">
+                                <div class="card mycard">
                                     <div class="card-body">
-                                        <h4 class="list-group-item-heading">Page Title</h4>
+                                        <h4 class="list-group-item-heading">
+                                            <?php echo $row['header'] ?>
+                                        </h4>
                                         <div style="float:right">
-                                                <button type="button" class="mybtn btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">
-                                                    <i class="fas fa-info-circle"></i>
-                                                </button>
-                                            </a>
+                                            <button type="button" class="modelBTN btn btn-info" data-id="<?php echo $row['id'] ?>" data-toggle="modal" data-target=".bd-example-modal-lg">
+                                                <i class="fas fa-info-circle"></i>
+                                            </button>
 
-                                            <a href="#">
+                                            <a href="edit/<?php echo $row['id'] ?>">
                                                 <button class="mybtn btn btn-primary">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                             </a>
                                             
-                                            <a href="#">
+                                            <a href="delete/<?php echo $row['id'] ?>" onclick="return confirm('Are you sure?')">
                                                 <button class=" btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                    <span class="fas fa-trash"></span>
                                                 </button>
                                             </a>
                                         </div>
                                         <br>
                                     </div>
                                 </div>
+                                <?php
+                                    endwhile;
+                                ?>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <div class="job card">
                                 <div class="card-body">
-                                    <form class="">
+                                    <form method="post" enctype="multipart/form-data">
                                         <div class="position-relative form-group">
                                             <label for="title" class="">Page Title</label>
                                             <select name="title" class="form-control">
@@ -213,10 +278,14 @@
                                             <label for="user" class="">User</label>
                                             <select name="title" class="form-control">
                                                 <option>Select User</option>
-                                                <option value="1">Summary</option>
-                                                <option value="2">Performance</option>
-                                                <option value="3">Interface</option>
-                                                <option value="4">AI-Feed</option>
+                                                <?php
+                                                    $rlt = mysqli_query($conn,"SELECT * FROM user WHERE type='0'");
+                                                    while ($row = mysqli_fetch_assoc($rlt)):
+                                                ?>
+                                                <option value="<?php echo $row['id'] ?>"><?php echo $row['name'] ?></option>
+                                                <?php
+                                                    endwhile;
+                                                ?>
                                             </select>
                                         </div>
                                         <div class="position-relative form-group">
@@ -256,10 +325,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p><b>Display Page</b></p>
-                <p><b>Display User</b></p>
-                <p><b>Post Body</b></p>
-                <p><b>Video</b></p>
+                <div id="info"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -267,3 +333,22 @@
         </div>
     </div>
 </div>
+
+<style>
+    .mycard {
+        margin-top: 10px;
+    }
+</style>
+
+<script>
+    $(document).on("click", ".modelBTN", function () {
+        var Id = $(this).data('id');
+        $.ajax({
+            url: 'info.php',
+            data: 'id='+Id,
+            success:function (data) {
+                $('#info').html(data);
+            }
+        });
+    });
+</script>

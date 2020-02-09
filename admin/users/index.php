@@ -1,3 +1,43 @@
+<?php
+    include '../../dbconnect.php';
+
+    if(!$_SESSION['username']) {
+        header("location: /aiinterf/");
+    }
+
+    $msg = '';
+    $err = '';
+
+    if($_GET['msg']) {
+        $msg = $_GET['msg'];
+    }
+
+    if(isset($_POST['add'])) {
+
+        $name = $_POST['name'];
+		$email = $_POST['email'];
+		$username = $_POST['username'];
+		$type = $_POST['type'];
+		$pwd1 = $_POST['password'];
+        
+        $query1 = "SELECT * FROM user WHERE username = '$username' OR email = '$email'";
+		$result1 = mysqli_query($con,$query1) or die($query);
+        $num = mysqli_num_rows($result1);
+        
+        if($num != 0) {
+			$err = "User with same username or email already exists!";
+		} else {
+			$pwd = md5($pwd1);
+			$query = "INSERT INTO user VALUES ('','$name','$username','$pwd','$email','$type')";
+			$result = mysqli_query($con,$query);
+			$msg = "New user has been registered!!";
+		}
+    }
+
+    $sql = "SELECT * FROM user";
+    $result = mysqli_query($conn,$sql);
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -12,6 +52,7 @@
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
     
+    <script src="../../js/jquery-3.4.1.min.js"></script>
     <link href="../../css/main.css" rel="stylesheet">
 </head>
 <body>
@@ -56,12 +97,12 @@
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                             <div class="widget-heading">
-                                                Alina Mclourd
+                                                <?php echo $_SESSION['name'] ?>
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </div>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
+                                            <a href="../../logout"><button type="button" tabindex="0" class="dropdown-item">Logout</button></a>
                                         </div>
                                     </div>
                                 </div>
@@ -165,28 +206,49 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                        if($msg != '') {
+                    ?>
+                    <div class="alert alert-success" role="alert">
+                        <?php echo $msg ?>
+                    </div>
+                    <?php
+                        }
+                    ?>
+                    <?php
+                        if($err != '') {
+                    ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $err ?>
+                    </div>
+                    <?php
+                        }
+                    ?>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <h5 class="card-header">List of Users</h5>
                             <div class="list-group">
-                                <div class="card">
+                                <?php
+                                    while ($row = mysqli_fetch_assoc($result)):
+                                ?>
+                                <input type="hidden" name="cid" value="<?php echo $row['id']; ?>">
+                                <div class="card mycard">
                                     <div class="card-body">
-                                        <h4 class="card-title">User Full Name</h4>
-                                        <h6 class="card-subtitle mb-2 text-muted">username</h6>
+                                        <h4 class="list-group-item-heading">
+                                            <?php echo $row['name'] ?>
+                                        </h4>
                                         <div style="float:right">
-                                                <button type="button" class="mybtn btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">
-                                                    <i class="fas fa-info-circle"></i>
-                                                </button>
-                                            </a>
+                                            <button type="button" class="modelBTN btn btn-info" data-id="<?php echo $row['id'] ?>" data-toggle="modal" data-target=".bd-example-modal-lg">
+                                                <i class="fas fa-info-circle"></i>
+                                            </button>
 
-                                            <a href="#">
+                                            <a href="edit/<?php echo $row['id'] ?>">
                                                 <button class="mybtn btn btn-primary">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                             </a>
-                                            
-                                            <a href="#">
-                                                <button class=" btn btn-danger">
+                                            <a href="delete/<?php echo $row['id'] ?>" onclick="return confirm('Are you sure?')">
+                                                <button type="submit" name="delete" class=" btn btn-danger">
                                                     <span class="fas fa-trash"></span>
                                                 </button>
                                             </a>
@@ -194,12 +256,15 @@
                                         <br>
                                     </div>
                                 </div>
+                                <?php
+                                    endwhile;
+                                ?>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <div class="job card">
                                 <div class="card-body">
-                                    <form class="">
+                                    <form method="post">
                                         <div class="position-relative form-group">
                                             <label for="name" class="">Full Name</label>
                                             <input type="text" name="name" id="name" placeholder="Full Name of user" class="form-control" required />
@@ -248,11 +313,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p><b>Full Name</b></p>
-                <p><b>Username</b></p>
-                <p><b>Email Address</b></p>
-                <p><b>Account Type</b></p>
-                <p><b>Password</b></p>
+                <div id="info"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -260,3 +321,22 @@
         </div>
     </div>
 </div>
+
+<style>
+    .mycard {
+        margin-top: 10px;
+    }
+</style>
+
+<script>
+    $(document).on("click", ".modelBTN", function () {
+        var jobId = $(this).data('id');
+        $.ajax({
+            url: 'info.php',
+            data: 'id='+jobId,
+            success:function (data) {
+                $('#info').html(data);
+            }
+        });
+    });
+</script>

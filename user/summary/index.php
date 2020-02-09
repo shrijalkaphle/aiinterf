@@ -1,3 +1,7 @@
+<?php
+    include '../../dbconnect.php';
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -56,7 +60,7 @@
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                             <div class="widget-heading">
-                                                Alina Mclourd
+                                                <?php echo $_SESSION['name'] ?>
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </div>
                                         </a>
