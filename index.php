@@ -41,6 +41,7 @@
     <title>AI-Interf</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <script src="js/jquery-3.4.1.min.js"></script>
@@ -51,11 +52,13 @@
         <nav class="navbar navbar-expand-lg fixed-top py-md-3">
             <div class="container">
                 <img src="assets/images/logo.png" alt="">
-                <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><i class="fa fa-bars"></i></button>
+                <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right">
+                    <i class="fas fa-bars"></i>
+                </button>
                 
                 <div id="navbarSupportedContent" class="collapse navbar-collapse">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active"><a href="#" class="nav-link text-uppercase font-weight-bold">Home <span class="sr-only">(current)</span></a></li>
+                        <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">Home <span class="sr-only">(current)</span></a></li>
                         <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">Portfolio</a></li>
                         <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">About</a></li>
                         <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">Carrer</a></li>
@@ -77,7 +80,7 @@
                     <?php
                         }
                     ?>
-            <div class="card" style="width: 40%; margin: auto;">
+            <div class="card" style="width: 300px; margin: auto;">
                 <center><h2 class="card-header">LOGIN</h2></center>
                 <div class="form-div">
                     <form method="post">

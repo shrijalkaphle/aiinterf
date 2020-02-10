@@ -3,7 +3,7 @@
 }
 
 .navbar .nav-link {
-    color: #000;
+    color: #000 !important;
 }
 
 .navbar .nav-link:hover,
