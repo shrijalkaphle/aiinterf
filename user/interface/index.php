@@ -1,9 +1,40 @@
 <?php
     include '../../dbconnect.php';
 
-    if(!$_SESSION['username']) {
+    if(!$_SESSION['id']) {
         header("location: ". ROOT ."");
     }
+
+    $id = $_SESSION['id'];
+
+    $msg = '';
+    $err = '';
+
+    if($_GET['msg']) {
+        $msg =  $_GET['msg'];
+    }
+
+    if(isset($_POST['upload'])) {
+        $file = $_FILES['file']['name'];
+        $target_dir = "../../uploads/".$id."/";
+        $location = $id."/" . $file;
+        if(!file_exists($target_dir)) {
+            mkdir($target_dir);
+        }
+        $target_file = $target_dir . basename($file);
+
+        if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+            $query = "INSERT INTO filesUpload VALUES ('','$file','$location','$id')";
+            $resukt = mysqli_query($conn,$query);
+
+            $msg = "The file ". $file ." has been uploaded.";
+        } else {
+            $err =  "Sorry, there was an error uploading your file.";
+        }
+    };
+
+    $query = "SELECT * FROM filesupload WHERE userid = '$id' ORDER BY id DESC";
+    $result = mysqli_query($conn,$query);
 ?>
 
 <!doctype html>
@@ -167,11 +198,29 @@
                         </div>
                     </div>
                     <div class="contain">
-                        <form method="post" class="inline">
-                            <input type="file" name="" id="">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i></button>
+                        <form method="post" enctype="multipart/form-data" class="inline">
+                            <input type="file" name="file" id="file" />
+                            <button type="submit" name="upload" class="btn btn-primary"><i class="fas fa-upload"></i></button>
                         </form>
                     </div>
+                    <?php
+                        if($msg != '') {
+                    ?>
+                    <div class="alert alert-success">
+                        <?php echo $msg ?>
+                    </div>
+                    <?php
+                        }
+                    ?>
+                    <?php
+                        if($err != '') {
+                    ?>
+                    <div class="alert alert-danger">
+                        <?php echo $err ?>
+                    </div>
+                    <?php
+                        }
+                    ?>
                     <div class="spacer"></div>
                     <div class="card mycard">
                         <div class="card-body">
@@ -182,14 +231,22 @@
                                     <td></td>
                                 </thead>
                                 <tbody>
+                                    <?php
+                                        while($data = mysqli_fetch_assoc($result)):
+                                            $filename = pathinfo($data['name'], PATHINFO_FILENAME);
+                                            $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+                                    ?>
                                     <tr>
-                                        <td>1</td>
-                                        <td>1</td>
+                                        <td><?php echo $filename ?></td>
+                                        <td><?php echo $extension ?></td>
                                         <td>
                                             <a href="#" download><button class="btn btn-success"><i class="fas fa-download"></i></button></a>
                                             <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
+                                    <?php
+                                        endwhile;
+                                    ?>
                                 </tbody>
                             </table>
                         </div>

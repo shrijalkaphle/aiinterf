@@ -1,9 +1,13 @@
 <?php
     include '../../dbconnect.php';
 
-    if(!$_SESSION['username']) {
+    if(!$_SESSION['id']) {
         header("location: ". ROOT ."");
     }
+
+    $id = $_SESSION['id'];
+    $query = "SELECT * FROM pages WHERE title='1' AND user = '$id' ORDER BY id DESC";
+    $result = mysqli_query($conn,$query);
 ?>
 
 <!doctype html>
@@ -166,7 +170,35 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row"></div>
+                    <?php
+                        while($data = mysqli_fetch_assoc($result)):
+                    ?>
+                    <div class="mycard card">
+                        <div class="card-body">
+                            <h2 class="card-title"> <?php echo $data['header'] ?></h2>
+                            <br>
+                            <?php
+                                if($data['location'] == '') {
+                            ?>
+                            <p><?php echo $data['body'] ?></p>
+                            <?php
+                                } else {
+                            ?>
+                            <div class="row">
+                                <div class="col-md-6"><p><?php echo $data['body'] ?></p></div>
+                                <div class="col-md-6">
+                                    <video allowfullscreen="" width="400px" height="auto" __idm_id__="198042625" controls="" src="../../assets/<?php echo $data['location'] ?>"></video>
+                                </div>
+                            </div>
+                            <?php
+                                }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="spacer"></div>
+                    <?php
+                        endwhile;
+                    ?>
                 </div>
                 <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
             </div>
@@ -175,3 +207,11 @@
     </div>
 </body>
 </html>
+
+<style>
+    .mycard {
+        width: 90%;
+        margin: auto;
+        padding: 10px;
+    }
+</style>

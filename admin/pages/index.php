@@ -1,7 +1,7 @@
 <?php
     include '../../dbconnect.php';
 
-    if(!$_SESSION['username']) {
+    if(!$_SESSION['id']) {
         header("location: ". ROOT ."");
     }
 
@@ -270,8 +270,7 @@
                                                 <option>Select Page Title</option>
                                                 <option value="1">Summary</option>
                                                 <option value="2">Performance</option>
-                                                <option value="3">Interface</option>
-                                                <option value="4">AI-Feed</option>
+                                                <option value="3">AI-Feed</option>
                                             </select>
                                         </div>
                                         <div class="position-relative form-group">

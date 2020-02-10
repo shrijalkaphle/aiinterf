@@ -1,6 +1,6 @@
 <?php
     include '../../dbconnect.php';
-    if(!$_SESSION['username']) {
+    if(!$_SESSION['id']) {
         header("location: ". ROOT ."");
     }
 ?>

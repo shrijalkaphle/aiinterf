@@ -16,7 +16,7 @@
 
         if($num != 0) {
             $data = mysqli_fetch_assoc($result);
-            $_SESSION['username'] = $data['name'];
+            $_SESSION['id'] = $data['id'];
             $_SESSION['name'] = $data['name'];
             $_SESSION['type'] = $data['type'];
 
